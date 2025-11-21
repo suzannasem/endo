@@ -7,3 +7,7 @@ This is a work in progress and will be updated as I continue my research.
 File guide:
 * Miller_fn.m: Matlab function file for replicating Miller (2025). Contains main ODE systems.
 * Miller_main.m: Matlab main file for replication Miller (2025). Simulates different regimes using ode15s and produces figures as in paper.
+
+Citation:
+
+Miller, C., Germano, D. P. J., Chenoweth, A. M., & Holdsworth-Carson, S. (2025). Mathematical modelling of the immune response during endometriosis lesion onset. bioRxiv. [https://doi.org/10.1101/2025.01.20.633967].
