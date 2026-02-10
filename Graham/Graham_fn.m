@@ -41,3 +41,4 @@ dP4dt = -deltaP .* P4 + p .* LB .* S;
 
 %% output %%
 out = [dFSHpdt ; dFSHdt ; dLHpdt ;dLHdt ; dPHdt ; dOMdt ; dLBdt ; dSdt ; dE2dt ; dP4dt];
+
