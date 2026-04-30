@@ -40,7 +40,8 @@ be=160;
 de=12;
 
 mue = ae.*(sin(pi.*(t+de)./28)).^be;  
-%mue = params.mue ; % only use in surrogate model
+%mue = params.muE ; % only use in surrogate model
+
 deltaE0 = params.deltaE0 ; 
 gamma = params.gamma ;
 rhoF = params.rhoF ;
@@ -69,7 +70,7 @@ dm2dt = beta2 .* m0 + beta12 .* m1 - beta21 .* m2 - deltaM2 .* m2;
 
 % nk cells
 dk0dt = muk - thetaK .* k0 .* (m1 ./ (cm1 + m1)) - deltaK0 .* k0;
-dkadt = thetaK .* k0 .* (m1 ./ (cm1 + m1)) + etaK .* (1 - (ka + k0)./kc).* ka - sigma .* (ef + ea).* ka - deltaKa * ka;
+dkadt = thetaK .* k0 .* (m1 ./ (cm1 + m1)) + etaK .* (1 - (ka + k0)./kc).* ka - deltaKa * ka - sigma .* (ef + ea).* ka ;
 
 % endometrial cells
 de0dt = mue - deltaE0 .* (rho0 .* e0 + (1-rho0).* e0);

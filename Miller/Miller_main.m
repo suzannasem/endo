@@ -26,7 +26,7 @@ params.kc = 10^6 ; % cells / mL
 params.sigma = 10^(-5); % mL / cells * day
 
 % endo params
-%params.mue = 1260; % cells / mL * day - avg
+params.mue = 1260; % cells / mL * day - avg
 params.deltaE0 = 1.0 ; % 1/day
 params.gamma = 0.8 ;
 params.rhoF = 0.1; % 1/day
@@ -35,6 +35,7 @@ params.etaE = 1.0; % 1/day
 params.ec = 10^9 ; % cells/mL
 params.cm2 = 100; % cells/mL
 params.deltaEa = 0.14; % 1/day 
+params.muE = 1260 ;
 
 
 %% Initial conditions %%
@@ -53,10 +54,10 @@ init = [m00, m10, m20, k00, ka0, e00, ef0, ea0] ;
 %y0 = y0.*(1 + 0.1*dY);
 
 opts = odeset('RelTol',1e-6,'AbsTol',1e-6);
+tspan = 0:0.5:1200 ;
 
 %% ODE Simulations %%
 
-tspan = 0:0.5:1200 ;
 [t,Y] = ode15s(@(t,y) Miller_fn(t,y,params, 10^(-6), 10^(-5), 0.1),tspan,init, opts); % given params - 1
 [t1,Y1] = ode15s(@(t,y) Miller_fn(t,y,params, 10^(-6.9), 10^(-4.9), 0.1),tspan,init, opts); % scenario 2 on fig 4 b
 [t2,Y2] = ode15s(@(t,y) Miller_fn(t,y,params, 10^(-6.4), 10^(-5.3), 0.1),tspan,init, opts); % 3
@@ -163,7 +164,7 @@ ea6 = Y6(:,8);
 
 %% Plotting %%
 
-% Figure 1
+% Figure 1: healthy baseline
 
 figure(1)
 
@@ -173,6 +174,8 @@ legend("K_0", "K_A")
 xlabel("Time in days")
 ylabel("Cells / mL")
 xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 ylim([0,400e3])
 title("Natural Killer Cells")
 
@@ -181,6 +184,8 @@ plot(t, e0, 'LineWidth', 2)
 xlabel("Time in days")
 ylabel("Cells / mL")
 xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 ylim([0, 15e3])
 title("Eutopic Endometrial Cells")
 
@@ -190,6 +195,8 @@ legend("M_0", "M_1", "M_2")
 xlabel("Time in days")
 ylabel("Cells / mL (log scale)")
 xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Macrophage")
 
 subplot(2,2,4)
@@ -198,7 +205,55 @@ legend("E_A", "E_F")
 xlabel("Time in days")
 ylabel("Cells / mL")
 xlim([1000,1080])
-ylim([0,0.7e3])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
+%ylim([0,0.7e3])
+title("Ectopic Endometrial Cells")
+
+% Immune cell profile for disease state 5
+
+figure(11)
+
+subplot(2,2,1)
+plot(t22, k022, '--', t22, ka22, '-', 'LineWidth', 2)
+legend("K_0", "K_A")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
+ylim([0,400e3])
+title("Natural Killer Cells")
+
+subplot(2,2,2)
+plot(t22, e022, 'LineWidth', 2)
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
+ylim([0, 15e3])
+title("Eutopic Endometrial Cells")
+
+subplot(2,2,3)
+semilogy(t22, m022, '--', t22, m122, '-', t22, m222, '-.', 'LineWidth', 2)
+legend("M_0", "M_1", "M_2")
+xlabel("Time in days")
+ylabel("Cells / mL (log scale)")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
+title("Macrophage")
+
+subplot(2,2,4)
+plot(t2, ea22, '-', t22, ef22, '-', 'LineWidth', 2)
+legend("E_A", "E_F")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
+%ylim([0,0.7e3])
 title("Ectopic Endometrial Cells")
 
 % different disease states
@@ -210,6 +265,8 @@ legend('3','4','5')
 xlim([1000,1080])
 ylabel("E_A (cells/mL)")
 ylim([10^0, 10^9.1])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Attached Cells in Disease State")
 
 subplot(3,1,2)
@@ -217,6 +274,8 @@ plot(t, ea, '-', t1, ea1, '--', 'LineWidth', 2)
 legend('1','2')
 xlim([1000,1080])
 ylabel("E_A (cells/mL)")
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Attached Cells in Low/No Disease State")
 
 subplot(3,1,3)
@@ -224,6 +283,8 @@ plot(t, ef, '-', t1, ef1, '--', t2, ef2, '-.', t11, ef11, '.', t22, ef22, ':', '
 legend('1','2','3','4','5')
 xlim([1000,1080])
 ylabel("E_F (cells/mL)")
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Endometrial Cells in Peritoneal Fluid")
 
 
@@ -233,11 +294,11 @@ figure(3)
 subplot(3,2,1)
 axis off
 hold on;
-h1 = plot(nan, nan, 'b--', 'DisplayName', '0');
-h2 = plot(nan, nan, 'r-.', 'DisplayName', '0.005');
-h3 = plot(nan, nan, 'y.', 'DisplayName', '0.01');
-h4 = plot(nan, nan, 'v--', 'DisplayName', '0.1');
-h5 = plot(nan, nan, 'g:', 'DisplayName', '0.2');
+h1 = plot(nan, nan, '--', 'DisplayName', '0', 'LineWidth', 2);
+h2 = plot(nan, nan, '-.', 'DisplayName', '0.005', 'LineWidth', 2);
+h3 = plot(nan, nan, '.', 'DisplayName', '0.01','LineWidth', 2);
+h4 = plot(nan, nan, '-', 'DisplayName', '0.1','LineWidth', 2);
+h5 = plot(nan, nan, ':', 'DisplayName', '0.2','LineWidth', 2);
 hold off
 legend([h1 h2 h3 h4 h5], 'Location', 'best', 'Box', 'on');
 title('\rho Legend')
@@ -249,6 +310,8 @@ xlabel("Time in days")
 ylabel("K_A Cells / mL (\times 10^3)")
 xlim([1000, 1080])
 ylim([0,300e3])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Activated NK cells, Varying Retrograde Clearance \rho_0")
 
 subplot(3,2,3)
@@ -257,6 +320,8 @@ plot(t3, ef3, '--', t4, ef4, '-.', t5, ef5, '.', t, ef, '-', t6, ef6, ':', 'Line
 xlabel("Time in days")
 ylabel("E_f Cells / mL")
 xlim([1000, 1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 %ylim([0,1e3])
 title("Endometrial Cells in Peritoneal Fluid, Varying Retrograde Clearance \rho_0")
 
@@ -272,6 +337,8 @@ plot(t3, m13_p, '--', t4, m14_p, '-.', t5, m15_p, '.', t, m1_p, '-', t6, m16_p, 
 xlabel("Time in days")
 ylabel("Prop of M1 cells")
 xlim([1000, 1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 title("Proportion of Inflammatory-type Macrophage")
 
 m2_p = m2./(m0 + m1 + m2) ;
@@ -286,6 +353,8 @@ plot(t3, m23_p, '--', t4, m24_p, '-.', t5, m25_p, '.', t, m2_p, '-', t6, m26_p, 
 xlabel("Time in days")
 ylabel("Prop of M2 cells")
 xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 ylim([0.046, 0.049])
 title("Proportion of Non-Inflammatory-type Macrophage")
 
@@ -293,8 +362,10 @@ subplot(3,2,6)
 plot(t3, ea3, '--', t4, ea4, '-.', t5, ea5, '.', t, ea, '-', t6, ea6, ':', 'LineWidth', 2)
 %legend("0", "0.005", "0.01", "0.1", "0.2")
 xlabel("Time in days")
-ylabel("E_f Cells / mL")
+ylabel("E_F Cells / mL")
 xlim([1000, 1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70"})
 %ylim([0,1e3])
 title("Lesion Cells")
 
@@ -317,7 +388,7 @@ m0_vals_high = zeros(5,5) ;
 % empty matrix for storing m1
 m1_vals_low = zeros(5,5) ;
 m1_vals_mod = zeros(5,5) ;
-m1_vals_high = zeros(5,5) ;
+m1_vals_high = zeros(5,5);
 
 % empty matrix for storing m2
 m2_vals_low = zeros(5,5) ;
@@ -356,7 +427,7 @@ end
 % timing
 elapsedTime = toc;  % stop timer
 fprintf('Loop runtime: %.2f seconds\n', elapsedTime);
-
+%%
 % plot heatmap - Figure 4(b) in text
 figure(4)
 
@@ -367,7 +438,7 @@ xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('Low influx: \rho_0 = 0.01')
 cb = colorbar ;
-cb.Ticks = -3:9 ;
+cb.Ticks = 1:9 ;
 cb.Label.String = 'Lesion Cells, in Powers of 10' ;
 
 subplot(1,3,2)
@@ -377,7 +448,7 @@ xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('Moderate influx: \rho_0 = 0.1')
 cb = colorbar ;
-cb.Ticks = -3:9 ;
+cb.Ticks = 1:9 ;
 cb.Label.String = 'Lesion Cells, in Powers of 10' ;
 
 subplot(1,3,3)
@@ -387,8 +458,10 @@ xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('High influx: \rho_0 = 0.2')
 cb = colorbar ;
-cb.Ticks = -3:9 ;
+cb.Ticks = 1:9 ;
 cb.Label.String = 'Lesion Cells, in Powers of 10' ;
+
+sgtitle('Lesion Cell Count')
 
 % proportions of m1 and m2 macrophage
 m1_prop_low = m1_vals_low ./ (m0_vals_low + m1_vals_low + m2_vals_low) ;
@@ -414,49 +487,55 @@ m222_p = m222./(m022 + m122 + m222) ; % scenario 5
 % plot heatmap - Figure 5a/b in text
 figure(5)
 
-subplot(2,3,1)
-heatmap(omega_list, beta1_list, m1_prop_low) ;
+subplot(1,3,1)
+imagesc([1e-6,1e-4],[1e-7,1e-5], log10(m1_prop_low)) ;
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
 xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('Low influx: \rho_0 = 0.01')
 colorbar 
 
-subplot(2,3,2)
-heatmap(omega_list, beta1_list, m1_prop_mod)
+subplot(1,3,2)
+imagesc([1e-6,1e-4],[1e-7,1e-5], log10(m1_prop_mod))
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
 xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('Moderate influx: \rho_0 = 0.1')
 colorbar
 
-subplot(2,3,3)
-heatmap(omega_list, beta1_list, m1_prop_high)
+subplot(1,3,3)
+imagesc([1e-6,1e-4],[1e-7,1e-5], log10(m1_prop_high))
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
 xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
 ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
 title('High influx: \rho_0 = 0.2')
 colorbar
 cb.Ticks = -3:9 ;
 
-subplot(2,3,4)
-heatmap(omega_list, beta1_list, m2_prop_low)
-xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
-ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
-title('Low influx: \rho_0 = 0.01')
-colorbar
+sgtitle('Proportion of M_1 (Pro-Inflammatory) Macrophage')
 
-subplot(2,3,5)
-heatmap(omega_list, beta1_list, m2_prop_mod)
-xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
-ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
-title('Moderate influx: \rho_0 = 0.1')
-clim([1e-4, 1e-1]);
-colorbar
+%subplot(2,3,4)
+%heatmap(omega_list, beta1_list, m2_prop_low)
+%xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
+%ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
+%title('Low influx: \rho_0 = 0.01')
+%colorbar
 
-subplot(2,3,6)
-heatmap(omega_list, beta1_list, m2_prop_high)
-xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
-ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
-title('High influx: \rho_0 = 0.2')
-colorbar
+%subplot(2,3,5)
+%heatmap(omega_list, beta1_list, m2_prop_mod)
+%xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
+%ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
+%title('Moderate influx: \rho_0 = 0.1')
+%clim([1e-4, 1e-1]);
+%colorbar
+
+%subplot(2,3,6)
+%heatmap(omega_list, beta1_list, m2_prop_high)
+%xlabel('Clearance rate, \omega (c^{-1}\cdot mL \cdot d^{-1})')
+%ylabel('Detection Rate, \beta_1 (c^{-1}\cdot mL \cdot d^{-1})')
+%title('High influx: \rho_0 = 0.2')
+%colorbar
+%%
 
 figure(6)
 
@@ -473,3 +552,164 @@ legend("1", "2", "3", "4", "5")
 xlabel("Time in days")
 ylabel("M_2 Proportion")
 xlim([1010, 1090])
+
+%% test sigma %%
+
+% values to test
+sigma_list = logspace(-8, -2, 40) ;
+muk_list = logspace(1, 10, 40) ;
+
+% empty storage matrices
+k0_store = zeros(length(sigma_list), length(muk_list));
+ka_store = zeros(length(sigma_list), length(muk_list));
+ea_store = zeros(length(sigma_list), length(muk_list));
+
+tic
+
+% loop
+for j = 1:length(sigma_list)
+    for i = 1:length(muk_list)
+        % rewrite parameters
+        params.sigma = sigma_list(j) ;
+        params.muk = muk_list(i) ;
+        % run simulations
+        [t,Y] = ode15s(@(t,y) Miller_fn(t,y, params,1e-6, 1e-5, 0.1),tspan,init, opts) ;
+        % storing values
+        k0_store(j,i) = Y(end,4);
+        ka_store(j,i) = Y(end,5);
+        ea_store(j,i) = Y(end,8);
+    end
+end
+
+elapsedTime = toc;  % stop timer
+fprintf('Loop runtime: %.2f seconds\n', elapsedTime);
+%%
+% plot
+figure(10001)
+
+subplot(1,3,1)
+imagesc(sigma_list,muk_list,log10(k0_store)')
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
+ylabel('\mu_K')
+xlabel('\sigma')
+title('Inactive NK Cells (K_0)')
+cb = colorbar ;
+cb.Label.String = 'Inactive NK Cell Count in Powers of 10' ;
+
+subplot(1,3,2)
+imagesc(sigma_list,muk_list,log10(ka_store)')
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
+ylabel('\mu_K')
+title('Active NK Cells (K_A)')
+xlabel('\sigma')
+colormap('spring');
+cb = colorbar ;
+cb.Label.String = 'Active NK Cell Count in Powers of 10' ;
+
+subplot(1,3,3)
+imagesc(sigma_list,muk_list,log10(abs(ea_store))')
+set(gca, 'XScale', 'log', 'YScale', 'log','YDir','normal')
+ylabel('\mu_K')
+title('Lesion Cells (E_A)')
+xlabel('\sigma')
+cb = colorbar ;
+cb.Label.String = 'Lesion Cell Count in Powers of 10' ;
+sgtitle('Parameter Sweep for \sigma and \mu_K')
+
+
+%% (more) realistic disease state
+
+% change values of sigma and muk
+params.sigma = 1e-8;
+params.muk = 3.5e3;
+
+[t,Y] = ode15s(@(t,y) Miller_fn(t,y,params, 10^(-6), 10^(-5.0), 0.1),tspan,init, opts); % given params - 1
+[t22,Y22] = ode15s(@(t,y) Miller_fn(t,y,params, 10^(-6), 10^(-5.7), 0.1),tspan, init, opts); % 3
+
+% default (scenario 1)
+m0 = Y(:,1);
+m1 = Y(:,2);
+m2 = Y(:,3);
+k0 = Y(:,4);
+ka = Y(:,5);
+e0 = Y(:,6);
+ef = Y(:,7);
+ea = Y(:,8);
+
+% scenario 5
+m022 = Y22(:,1);
+m122 = Y22(:,2);
+m222 = Y22(:,3);
+k022 = Y22(:,4);
+ka22 = Y22(:,5);
+e022 = Y22(:,6);
+ef22 = Y22(:,7);
+ea22 = Y22(:,8);
+
+% plotting new profiles
+
+figure(1907)
+hl = tiledlayout(2,2, 'TileSpacing', 'Compact');
+
+nexttile(hl)
+line1 = plot(t22, k022, '--', 'LineWidth', 2, 'DisplayName', 'K_0', 'Color', '#030f40');
+hold on
+line2 = plot(t22, ka22, '-', 'LineWidth', 2, 'DisplayName', 'K_A', 'Color', '#6b5393');
+hold off
+legend("K_0", "K_A")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70", "80"})
+ylim([0,4.5e5])
+title("Diseased NK Cell Profile")
+
+nexttile(hl)
+line3 = plot(t22, ea22, ':', 'LineWidth', 2, 'DisplayName', 'E_A', 'Color','#37316a');
+hold on
+line4 = plot(t22, ef22, '-.', 'LineWidth', 2, 'DisplayName', 'E_F', 'Color', '#d490c3');
+hold off
+legend("E_A", "E_F")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70", "80"})
+%ylim([0,0.7e3])
+title("Diseased Endometriotic Cell Profile")
+
+nexttile(hl)
+plot(t, k0, '--', 'Color', '#030f40', 'LineWidth', 2)
+hold on
+plot(t, ka, '-', 'Color', '#6b5393','LineWidth', 2)
+hold off
+%legend("K_0", "K_A")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70", "80"})
+ylim([0,4.5e5])
+title("Disease-Free NK Cell Profile")
+
+nexttile(hl)
+plot(t, ea, ':','Color','#37316a', 'LineWidth', 2)
+hold on
+plot(t, ef, '-.', 'Color', '#d490c3','LineWidth', 2)
+hold off
+%legend("E_A", "E_F")
+xlabel("Time in days")
+ylabel("Cells / mL")
+xlim([1000,1080])
+xticks(1000:10:1080)
+xticklabels({"0", "10", "20", "30", "40", "50", "60", "70", "80"})
+%ylim([0,4e5])
+title("Disease-Free Endometriotic Cell Profile")
+
+title(hl, "Disease and Disease-Free Profiles After Parameter Tuning")
+subtitle(hl, "\sigma = 1e-8, \mu_K = 3.5e3")
+%hl = legend([line1, line2, line3, line4]) ;
+%hl.FontSize = 14;
+%hl.Layout.Tile = 'east';
+%hl.Title.String = "Cell Type" ;
