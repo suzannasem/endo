@@ -1,7 +1,7 @@
 %%% File containing parameters for Graham Model %%%
 function [vf, KiFI, kF, cfp, cfe, cfi, v0L, v1L, KmL, KiLP, ...
     kL, clp, cle, f1, f2, h1, h2, w, l, shat, deltaS, eta, k2, ...
-    hs, tg1, e0, p, deltaF, V, deltaL, deltaE, deltaP, ...
+    hs, tg1, p, deltaF, V, deltaL, deltaE, deltaP, ...
     n] = graham_params
   
 % pituitary parameters
@@ -32,7 +32,7 @@ function [vf, KiFI, kF, cfp, cfe, cfi, v0L, v1L, KmL, KiLP, ...
   k2 = 8.276 ;
   hs = 11.691 ;
   tg1 = 6.3594 ;
-  e0 = 9.6377 ;
+%  e0 = 9.6377 ;
   p = 0.22851 ;
 
   % fixed parameters
