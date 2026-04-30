@@ -1,4 +1,4 @@
-%%%% LESIOn: Graham (2023) + Miller (2025) + Semaan (2026) + local estradiol %%%%
+%%%% LESIOn: Graham (2023) + Miller (2025) + Semaan (2026) + local estradiol (follicular growth) %%%%
 
 function out = LESIOn_fn(t,Y, K1, K2, psi, p)
    
