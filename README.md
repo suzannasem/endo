@@ -37,6 +37,8 @@ LESIOn folder:
 figs folder
 * All relevant figures across models
 
+Thesis_Draft.pdf: Working draft of my thesis! Contains biological background, mathematical explanations, and LESIOn interpretation.
+
 McL_Keefe.dat: Data used for Graham, Constant, and Spline Model (and for comparison in FrankenModel and LESIOn).
 
 Citations for Miller & Graham:
