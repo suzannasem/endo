@@ -1,4 +1,4 @@
-# The LESIOn Model for Endometriosis: Local Eatradiol Synthesis in Infertility Onset
+# The LESIOn Model for Endometriosis: Local Estradiol Synthesis in Infertility Onset
 
 This code is supplementary to my Master's thesis at Bryn Mawr College. We build on a model of lesion growth and immune dysfunction by Claire Miller et. al (2025) with the reduced Graham model (2023) for folllicular growth and hormonal dynamics. 
 
